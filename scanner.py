@@ -29,17 +29,17 @@ MT = [[   1, ERR,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado
 def filtro(c):
     if c == '#':
         return 0
-    elif c == 't' or c == 'f':
-        return 1
     elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
         return 2
+    elif c == 't' or c == 'f':
+        return 1
     elif c == '"':
         return 3
     elif c == '0' or c == '1' or c == '2' or \
        c == '3' or c == '4' or c == '5' or \
        c == '6' or c == '7' or c == '8' or c == '9':
         return 4
-    elif c == " ":
+    elif c == ' ' or ord(c) == 9 or ord(c) == 10 or ord(c) == 13: # blancos
         return 5
     elif c == '(':
         return 6
@@ -61,9 +61,13 @@ def obten_token():
     lexema = "" # palabra que genera el token
     while (True):
         while edo < 100:    # mientras el estado no sea ACEPTOR ni ERROR
+            print('hola')
             if _leer: _c = sys.stdin.read(1)
             else: _leer = True
+            print(f"c is {_c}")
+            print(f"filtro es {filtro(_c)}")
             edo = MT[edo][filtro(_c)]
+            print(f"edo {edo}")
             if edo < 100 and edo != 0: lexema += _c
         if edo == DIG:    
             _leer = False # ya se leyó el siguiente caracter
@@ -97,3 +101,4 @@ def obten_token():
             print("ERROR! palabra ilegal", lexema)
             return ERR
             
+obten_token()
