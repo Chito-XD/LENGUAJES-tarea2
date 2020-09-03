@@ -16,41 +16,42 @@ RRP = 105  # Delimitador: paréntesis derecho
 END = 300
 ERR = 200
 
-#        #   t/f  letra  "   dig  esp   (    )  raro   \n   $  
-MT = [[   1, ERR,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado inicial
-      [ ERR, BOL, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR], # edo 1 - booleanos
-      [ ERR, ERR,   2, ERR, ERR, SIM, SIM, SIM,   5, SIM, SIM], # edo 2 - símbolos
-      [ ERR, ERR,   3, STR,   3,   3, ERR, ERR, ERR,   3, ERR], # edo 3 - strings
-      [ ERR, ERR, ERR, ERR,   4, DIG, DIG, DIG, ERR, DIG, DIG], # edo 4 - digitos
-      [ ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR]  # edo 5 - ERROR
+#      bool  letra  "   dig  esp   (    )  raro   \n   $  
+MT = [[ BOL,   1,   2,   3,   0, LRP, RRP,   4,   0, END], # edo 0 - estado inicial
+      [ ERR,   1, ERR, ERR, SIM, SIM, SIM,   4, SIM, SIM], # edo 1 - símbolos
+      [ ERR,   2, STR,   2,   2, ERR, ERR, ERR,   2, ERR], # edo 2 - strings
+      [ ERR, ERR, ERR,   3, DIG, DIG, DIG, ERR, DIG, DIG], # edo 3 - digitos
+      [ ERR, ERR, ERR, ERR, ERR, ERR, ERR,   4, ERR, ERR]  # edo 4 - ERROR
     ] 
 
 
 def filtro(c):
-    if c == '#':
+    # print(f"ENTRO FILTRO: {c}")
+    # print(f"leng: {len(c)}")
+    if c == "#t" or c == "#f":
         return 0
-    elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
-        return 2
-    elif c == 't' or c == 'f':
-        return 1
+    elif len(c) == 2:
+        return 7
     elif c == '"':
-        return 3
+        return 2
     elif c == '0' or c == '1' or c == '2' or \
        c == '3' or c == '4' or c == '5' or \
        c == '6' or c == '7' or c == '8' or c == '9':
-        return 4
+        return 3
     elif c == ' ' or ord(c) == 9 or ord(c) == 10 or ord(c) == 13: # blancos
-        return 5
+        return 4
     elif c == '(':
-        return 6
+        return 5
     elif c == ')':
-        return 7
+        return 6
     elif c == '\n':
-        return 9
-    elif c == '$':
-        return 10    
-    else: 
         return 8
+    elif c == '$':
+        return 9
+    elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
+        return 1   
+    else: 
+        return 7
 
 _c = None    # siguiente caracter
 _leer = True # indica si se requiere leer un caracter de la entrada estándar
@@ -61,20 +62,19 @@ def obten_token():
     lexema = "" # palabra que genera el token
     while (True):
         while edo < 100:    # mientras el estado no sea ACEPTOR ni ERROR
-            print('hola')
             if _leer: _c = sys.stdin.read(1)
             else: _leer = True
-            print(f"c is {_c}")
-            print(f"filtro es {filtro(_c)}")
+            if _c == "#":
+                _c += sys.stdin.read(1)
             edo = MT[edo][filtro(_c)]
-            print(f"edo {edo}")
             if edo < 100 and edo != 0: lexema += _c
         if edo == DIG:    
             _leer = False # ya se leyó el siguiente caracter
             print("Digito ", lexema)
             return DIG
         elif edo == BOL:   
-            _leer = False # ya se leyó el siguiente caracter
+            # _leer = False # ya se leyó el siguiente caracter
+            lexema += _c
             print("Boooleano ", lexema)
             return BOL
         elif edo == SIM:   
@@ -82,7 +82,8 @@ def obten_token():
             print("Simbolo ", lexema)
             return SIM
         elif edo == STR:   
-            _leer = False # ya se leyó el siguiente caracter
+            # _leer = False # ya se leyó el siguiente caracter
+            lexema += _c
             print("String ", lexema)
             return STR
         elif edo == LRP:   
