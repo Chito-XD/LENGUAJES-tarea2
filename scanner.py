@@ -1,6 +1,7 @@
   
 # INTEGRANTES
 # Edgar Rubén Salazar Lugo A01338798
+# Jorge Alexander Giovannetti Pulido
 
 import sys
 
@@ -17,10 +18,10 @@ END = 300
 ERR = 200
 
 #        #   t/f  letra  "   dig  esp   (    )  raro   \n   $  
-MT = [[   1, ERR,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado inicial
+MT = [[   1,   2,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado inicial
       [ ERR, BOL, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR], # edo 1 - booleanos
-      [ ERR, ERR,   2, ERR, ERR, SIM, SIM, SIM,   5, SIM, SIM], # edo 2 - símbolos
-      [ ERR, ERR,   3, STR,   3,   3, ERR, ERR, ERR,   3, ERR], # edo 3 - strings
+      [ ERR,   2,   2, ERR, ERR, SIM, SIM, SIM,   5, SIM, SIM], # edo 2 - símbolos
+      [ ERR,   3,   3, STR,   3,   3, ERR, ERR, ERR,   3, ERR], # edo 3 - strings
       [ ERR, ERR, ERR, ERR,   4, DIG, DIG, DIG, ERR, DIG, DIG], # edo 4 - digitos
       [ ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR]  # edo 5 - ERROR
     ] 
@@ -29,10 +30,10 @@ MT = [[   1, ERR,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado
 def filtro(c):
     if c == '#':
         return 0
-    elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
-        return 2
     elif c == 't' or c == 'f':
         return 1
+    elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
+        return 2
     elif c == '"':
         return 3
     elif c == '0' or c == '1' or c == '2' or \
@@ -71,27 +72,27 @@ def obten_token():
             if edo < 100 and edo != 0: lexema += _c
         if edo == DIG:    
             _leer = False # ya se leyó el siguiente caracter
-            print("Digito ", lexema)
+            print("Digito", lexema)
             return DIG
         elif edo == BOL:   
-            _leer = False # ya se leyó el siguiente caracter
-            print("Boooleano ", lexema)
+            lexema += _c # el último caracter forma el lexema
+            print("Booleano", lexema)
             return BOL
         elif edo == SIM:   
             _leer = False # ya se leyó el siguiente caracter
-            print("Simbolo ", lexema)
+            print("Simbolo", lexema)
             return SIM
         elif edo == STR:   
             _leer = False # ya se leyó el siguiente caracter
-            print("String ", lexema)
+            print("String", lexema)
             return STR
         elif edo == LRP:   
             lexema += _c  # el último caracter forma el lexema
-            print("Delimitador ", lexema)
+            print("Delimitador", lexema)
             return LRP
         elif edo == RRP:  
             lexema += _c  # el último caracter forma el lexema
-            print("Delimitador ", lexema)
+            print("Delimitador", lexema)
             return RRP
         elif edo == END:
             print("Fin de expresion")
