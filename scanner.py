@@ -84,6 +84,7 @@ def obten_token():
             return SIM
         elif edo == STR:   
             _leer = False # ya se leyó el siguiente caracter
+            lexema = lexema[1:]
             print("String", lexema)
             return STR
         elif edo == LRP:   
