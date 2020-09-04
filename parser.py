@@ -11,6 +11,14 @@ from scanner import (
     ERR
 )
 
+# Gramática del parser
+# <prog> ::= <exp> <prog> | $
+# <exp> ::= <átomo>| <lista>
+# <átomo> ::=símbolo | <constante>
+# <constante> ::= número| booleano| string
+# <lista> ::= ( <elementos>)
+# <elementos> ::= <exp> <elemento> | 
+
 # Termina con un mensaje de error
 def error(mensaje):
     print("ERROR:", mensaje)
@@ -23,26 +31,42 @@ def match(tokenEsperado):
     else:
         error("token equivocado")
 
-def lista():
-    # print("----LISTA")
-    if token == LRP:
-        match(LRP)
-        lista()
-        match(RRP)
-    elif token == SIM or token == DIG or token == BOL or token == STR:
-        match(token)
-
 
 def prog():
-    if token == LRP:
-        match(token)
-        lista()
-        match(RRP)
-    elif token == SIM or token == DIG or token == BOL or token == STR:
-        match(token)
-        prog()
+    if(token == END):
+        return
     else:
-        error("Expresion mal terminada 2")
+        exp()
+        prog()
+
+def exp():
+    if token == LRP:
+        lista()
+    else:
+        atomo()
+
+def atomo():
+    if token == SIM:
+        match(token)
+    else:
+        constante()
+
+def constante():
+    if token == DIG or token == BOL or token == STR:
+        match(token)
+    else:
+        error("Expresion mal construida: constante no encontrada")
+
+def lista():
+    match(LRP)
+    elementos()
+    match(RRP)
+
+def elementos():
+    if(token != RRP):
+        exp()
+        elementos()
+        
     
 # Función principal: implementa el análisis sintáctico
 def parser():
