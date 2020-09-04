@@ -24,7 +24,7 @@ MT = [[   1,   2,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado
       [ ERR,   3,   3, STR,   3,   3, ERR, ERR, ERR,   3, ERR], # edo 3 - strings
       [ ERR, ERR, ERR, ERR,   4, DIG, DIG, DIG, ERR, DIG, DIG], # edo 4 - digitos
       [ ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR]  # edo 5 - ERROR
-    ] 
+    ]
 
 
 def filtro(c):
@@ -32,7 +32,7 @@ def filtro(c):
         return 0
     elif c == 't' or c == 'f':
         return 1
-    elif (ord(c) >= 65 and ord(c) <= 90) or (ord(c) >= 97 and ord(c) <= 122):
+    elif (c >= 'a' and c <= 'z'):
         return 2
     elif c == '"':
         return 3
