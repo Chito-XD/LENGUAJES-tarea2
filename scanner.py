@@ -62,13 +62,9 @@ def obten_token():
     lexema = "" # palabra que genera el token
     while (True):
         while edo < 100:    # mientras el estado no sea ACEPTOR ni ERROR
-            print('hola')
             if _leer: _c = sys.stdin.read(1)
             else: _leer = True
-            print(f"c is {_c}")
-            print(f"filtro es {filtro(_c)}")
             edo = MT[edo][filtro(_c)]
-            print(f"edo {edo}")
             if edo < 100 and edo != 0: lexema += _c
         if edo == DIG:    
             _leer = False # ya se leyó el siguiente caracter
@@ -83,8 +79,7 @@ def obten_token():
             print("Simbolo", lexema)
             return SIM
         elif edo == STR:   
-            _leer = False # ya se leyó el siguiente caracter
-            lexema = lexema[1:]
+            lexema += _c    
             print("String", lexema)
             return STR
         elif edo == LRP:   
@@ -103,4 +98,3 @@ def obten_token():
             print("ERROR! palabra ilegal", lexema)
             return ERR
             
-obten_token()
