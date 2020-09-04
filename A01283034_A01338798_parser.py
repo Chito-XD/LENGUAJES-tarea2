@@ -3,8 +3,17 @@
 # Edgar Rubén Salazar Lugo A01338798
 # Jorge Alexander Giovannetti Pulido A01283034
 
+
+# Gramática del parser
+# <prog> ::= <exp> <prog> | $
+# <exp> ::= <átomo>| <lista>
+# <átomo> ::=símbolo | <constante>
+# <constante> ::= número| booleano| string
+# <lista> ::= ( <elementos>)
+# <elementos> ::= <exp> <elemento> | 
+
 import sys
-from scanner import (
+from A01283034_A01338798_scanner import (
     obten_token,
     BOL,
     SIM,
@@ -16,17 +25,8 @@ from scanner import (
     ERR
 )
 
-# Gramática del parser
-# <prog> ::= <exp> <prog> | $
-# <exp> ::= <átomo>| <lista>
-# <átomo> ::=símbolo | <constante>
-# <constante> ::= número| booleano| string
-# <lista> ::= ( <elementos>)
-# <elementos> ::= <exp> <elemento> | 
-
-# Termina con un mensaje de error
-def error(mensaje):
-    print("ERROR:", mensaje)
+def error():
+    print(">>ERROR SINTACTICO<<")
     sys.exit(1)
 
 def match(tokenEsperado):
@@ -34,8 +34,7 @@ def match(tokenEsperado):
     if token == tokenEsperado:
         token = obten_token()
     else:
-        error("token equivocado")
-
+        error()
 
 def prog():
     if(token == END):
@@ -60,7 +59,7 @@ def constante():
     if token == DIG or token == BOL or token == STR:
         match(token)
     else:
-        error("Expresion mal construida: constante no encontrada")
+        error()
 
 def lista():
     match(LRP)
@@ -72,15 +71,14 @@ def elementos():
         exp()
         elementos()
         
-    
 # Función principal: implementa el análisis sintáctico
 def parser():
     global token 
     token = obten_token() # inicializa con el primer token
     prog()
     if token == END:
-        print("Expresion bien construida!!")
+        print(">>ENTRADA CORRECTA<<")
     else:
-        error("expresion mal terminada 1")
+        error()
 
 parser()
