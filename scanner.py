@@ -1,7 +1,7 @@
   
 # INTEGRANTES
 # Edgar Rubén Salazar Lugo A01338798
-# Jorge Alexander Giovannetti Pulido
+# Jorge Alexander Giovannetti Pulido A01283034
 
 import sys
 
