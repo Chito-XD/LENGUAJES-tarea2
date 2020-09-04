@@ -14,9 +14,10 @@ DIG = 103  # Digito
 LRP = 104  # Delimitador: paréntesis izquierdo
 RRP = 105  # Delimitador: paréntesis derecho
 
-END = 300
-ERR = 200
+END = 300  # Fin de expresion
+ERR = 200  # Estado de error
 
+# Matriz que empresa nuestro autómata 
 #        #   t/f  letra  "   dig  esp   (    )  raro   \n   $  
 MT = [[   1,   2,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado inicial
       [ ERR, BOL, ERR, ERR, ERR, ERR, ERR, ERR,   5, ERR, ERR], # edo 1 - booleanos
@@ -27,6 +28,7 @@ MT = [[   1,   2,   2,   3,   4,   0, LRP, RRP,   5,   0, END], # edo 0 - estado
     ]
 
 
+# Metodo que regresa la columna correspondiente a la matriz
 def filtro(c):
     if c == '#':
         return 0
@@ -91,7 +93,7 @@ def obten_token():
             print("Delimitador", lexema)
             return RRP
         elif edo == END:
-            print("Fin de expresion")
+            print("Fin de expresion $")
             return END
         else:   
             _leer = False # el último caracter no es raro
